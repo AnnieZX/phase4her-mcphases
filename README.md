@@ -1,63 +1,49 @@
-mcPHASES-ML
+# mcPHASES-ML
 
-Multimodal Temporal Representation Learning for Personalized Menstrual Cycle Modeling
+**Multimodal Temporal Representation Learning for Personalized Menstrual Cycle Modeling**
 
-Overview
+### Overview
 
 This project investigates whether multimodal physiological time-series signals can be used to learn meaningful and personalized representations of menstrual cycle dynamics.
 
 Using the mcPHASES dataset, we study:
 
-Representation learning from wearable and hormonal signals
-
-Menstrual phase classification
-
-Ovulation detection
-
-Personalized modeling vs global modeling
+- Representation learning from wearable and hormonal signals  
+- Menstrual phase classification  
+- Ovulation detection  
+- Personalized modeling vs global modeling
 
 The goal is to move beyond simple classification and explore whether latent physiological state embeddings improve predictive performance and generalization.
 
-Research Questions
-RQ1 – Representation Learning
+### Research Questions
 
+- **RQ1 – Representation Learning**  
 Can self-supervised temporal models learn meaningful physiological embeddings from multimodal wearable and hormonal time-series data?
-
-RQ2 – Downstream Prediction
-
+- **RQ2 – Downstream Prediction**  
 Do learned embeddings improve:
-
-Phase classification accuracy
-
-Ovulation detection performance
-
-compared to raw-feature baselines?
-
-RQ3 – Personalization
-
+  - Phase classification accuracy  
+  - Ovulation detection performance  
+  compared to raw-feature baselines?
+- **RQ3 – Personalization**  
 Does individualized fine-tuning outperform global models in modeling menstrual cycle dynamics?
 
-Dataset
+### Dataset
 
 We use the mcPHASES dataset, which includes:
 
-HRV
-
-Resting heart rate
-
-Skin temperature
-
-Sleep metrics
-
-Activity
-
-Hormone levels (e.g., LH, estrogen)
-
-Menstrual phase labels
+- HRV  
+- Resting heart rate  
+- Skin temperature  
+- Sleep metrics  
+- Activity  
+- Hormone levels (e.g., LH, estrogen)  
+- Menstrual phase labels
 
 Data is processed into sliding windows (default: 7-day windows).
 
-Project Structure
+### Project Structure
+
+```text
 mcphases-ml/
 │
 ├── data/
@@ -81,159 +67,161 @@ mcphases-ml/
 ├── notebooks/
 ├── requirements.txt
 └── README.md
-Installation
-1. Create virtual environment
-python3 -m venv venv
-source venv/bin/activate
-2. Install dependencies
-pip install -r requirements.txt
-Required packages
-torch
-numpy
-pandas
-scikit-learn
-xgboost
-matplotlib
-seaborn
-pyyaml
-tqdm
-einops
-Experimental Pipeline
-Step 1 — Data Preprocessing
+```
+
+### Installation
+
+1. **Create virtual environment**
+  ```bash
+   python3 -m venv venv
+   source venv/bin/activate
+  ```
+2. **Install dependencies**
+  ```bash
+   pip install -r requirements.txt
+  ```
+
+#### Required packages
+
+- torch  
+- numpy  
+- pandas  
+- scikit-learn  
+- xgboost  
+- matplotlib  
+- seaborn  
+- pyyaml  
+- tqdm  
+- einops
+
+### Experimental Pipeline
+
+#### Step 1 — Data Preprocessing
+
+```bash
 python src/data/preprocess.py
+```
 
 Includes:
 
-Missing value handling
-
-Normalization
-
-Sliding window segmentation
-
-User-level split
+- Missing value handling  
+- Normalization  
+- Sliding window segmentation  
+- User-level split
 
 Output stored in:
 
-data/processed/
-Step 2 — Baseline Models (Raw Features)
+- `data/processed/`
+
+#### Step 2 — Baseline Models (Raw Features)
+
+```bash
 python src/training/train_classifier.py --config configs/baseline.yaml
+```
 
 Models:
 
-Logistic Regression
+- Logistic Regression  
+- XGBoost  
+- LSTM  
+- Transformer
 
-XGBoost
+#### Step 3 — Self-Supervised Encoder (RQ1)
 
-LSTM
-
-Transformer
-
-Step 3 — Self-Supervised Encoder (RQ1)
+```bash
 python src/training/train_encoder.py --config configs/encoder.yaml
+```
 
 Training objectives:
 
-Contrastive learning
-
-Masked time-step prediction
-
-Reconstruction
+- Contrastive learning  
+- Masked time-step prediction  
+- Reconstruction
 
 Output:
 
-Physiological embeddings
+- Physiological embeddings  
+- Encoder checkpoints
 
-Encoder checkpoints
+#### Step 4 — Embedding-Based Prediction (RQ2)
 
-Step 4 — Embedding-Based Prediction (RQ2)
+```bash
 python src/training/train_classifier.py --config configs/classification.yaml
+```
 
 Compare:
 
-Raw features vs Embedding features
+- Raw features vs Embedding features
 
 Metrics:
 
-Accuracy
+- Accuracy  
+- F1-score  
+- AUROC
 
-F1-score
+#### Step 5 — Personalization (RQ3)
 
-AUROC
-
-Step 5 — Personalization (RQ3)
+```bash
 python src/training/fine_tune_user.py --config configs/personalization.yaml
+```
 
 Compare:
 
-Global model
+- Global model  
+- Per-user fine-tuning  
+- Few-shot adaptation
 
-Per-user fine-tuning
+### Evaluation Strategy
 
-Few-shot adaptation
-
-Evaluation Strategy
-
-User-level data split
-
-Leave-one-user-out validation
-
-Cross-user generalization
+- User-level data split  
+- Leave-one-user-out validation  
+- Cross-user generalization
 
 Metrics:
 
-Accuracy
+- Accuracy  
+- F1-score  
+- AUROC  
+- Per-user performance
 
-F1-score
-
-AUROC
-
-Per-user performance
-
-Embedding Analysis
+### Embedding Analysis
 
 We analyze learned representations via:
 
-t-SNE visualization
-
-Clustering separability
-
-Phase separability
+- t-SNE visualization  
+- Clustering separability  
+- Phase separability
 
 Notebook:
 
-notebooks/embedding_analysis.ipynb
-Expected Contributions
+- `notebooks/embedding_analysis.ipynb`
 
-A multimodal temporal representation learning framework for female health modeling
+### Expected Contributions
 
-Empirical evaluation of embedding utility in downstream tasks
+- A multimodal temporal representation learning framework for female health modeling  
+- Empirical evaluation of embedding utility in downstream tasks  
+- Quantitative analysis of personalization benefits  
+- A reproducible pipeline for menstrual cycle modeling
 
-Quantitative analysis of personalization benefits
+### Ethical Considerations
 
-A reproducible pipeline for menstrual cycle modeling
-
-Ethical Considerations
-
-Data privacy protection
-
-Bias across demographic groups
-
-Clinical interpretation limitations
+- Data privacy protection  
+- Bias across demographic groups  
+- Clinical interpretation limitations
 
 This project is intended for research purposes only and does not provide medical advice.
 
-Future Work
+### Future Work
 
-Survival modeling for phase transition prediction
+- Survival modeling for phase transition prediction  
+- Generative modeling of physiological trajectories  
+- Causal analysis between hormones and wearable signals  
+- Domain adaptation across datasets
 
-Generative modeling of physiological trajectories
+### Author
 
-Causal analysis between hormones and wearable signals
-
-Domain adaptation across datasets
-
-Author
-
-Annie Luo
-Computer Science
+**Annie Luo**  
+Computer Science  
 Wake Forest University
+mcPHASES-ML
+
