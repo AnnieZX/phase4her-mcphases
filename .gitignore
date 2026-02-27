@@ -1,0 +1,22 @@
+.ipynb_checkpoints/
+
+# IDE
+.vscode/
+
+# macOS
+.DS_Store
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Data (DO NOT COMMIT)
+data/raw/
+data/interim/
+data/processed/
+data/splits/
+
+# Experiments / outputs
+experiments/
